@@ -17,7 +17,6 @@ module.exports = {
 
 * [install and run mongoDB](https://docs.mongodb.org/manual/installation/)
 * [install Node](https://nodejs.org/en/)
-
 * install gulp globally `npm i -g gulp`
 * build with gulp `gulp build`
 * install packages locally `npm i`
@@ -26,7 +25,8 @@ module.exports = {
 
 ### Showing Thanks
 If this information helped you at all, feel free to show your thanks in increasing levels of gratitude.
-1. Star this repo (click that star icon at the top righ)
+
+1. Star this repo (click that star icon at the top right)
 2. Say thanks (tweet at [@ezekeal](http://twitter.com/ezekeal) and say thanks)
 3. Attribution, mention "Zach Koch" on your about page or readme
 4. Hire me. (I mean look how cool this is!)
