@@ -14,7 +14,30 @@ const RES_TIMESTAMP_FORMAT = 'M/D/YYYY h:mm:ss a'
 var router = express.Router()
 
 router.get('/', function (req, res) {
-  res.end('this is the api!')
+  res.end('This is the API!')
+})
+
+router.post('/', function (req, res) {
+  if (req.body && req.body.method) {
+    console.log('method is: ', req.body.method)
+    getRequestURL(req.body.method, function (err, url) {
+      if (err) { res.end('Error: ' + err) }
+
+      req.body.params.map(function (param) {
+        url += ('/' + param)
+      })
+
+      fetch(url)
+      .then(function (response) {
+        return response.json()
+      }).then(function (json) {
+        res.json(json)
+      })
+    })
+  } else {
+    res.end('No method given, make a request in the form:\n' +
+      '{ "method": "[method name]" "params": ["optional param"] }')
+  }
 })
 
 router.get('/timestamp', function (req, res) {
@@ -50,6 +73,12 @@ function getRequestURL (method, cb) {
     var signature = getSignature(method, timestamp)
 
     var url = `${SMITE_URL}/${method}Json/${DEV_ID}/${signature}/${sessionID}/${timestamp}`
+    switch (method) {
+      case 'getgods':
+        url += 'LANGUAGE_CODE'
+        break
+    }
+
     cb(err, url)
   })
 }
@@ -78,8 +107,6 @@ function getSessionId (cb) {
           'session_id': json.session_id,
           'timestamp': moment.utc(json.timestamp, RES_TIMESTAMP_FORMAT).toDate()
         }, function (err, session) {
-          console.log('timestamp was ' + json.timestamp)
-          console.log('saved timestamp is ' + session.timestamp)
           cb(err, session.session_id)
         })
       })
