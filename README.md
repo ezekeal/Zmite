@@ -11,7 +11,7 @@ To get started you will need to:
 ```js
 module.exports = {
   devId: '1234',
-  authKey: '327R2D2C3POTHX1138FN2187'
+  authKey: '327R2D2C3POTHX1138FN2187MSE6BB8GNK'
 }
 ```
 
@@ -28,5 +28,5 @@ If this information helped you at all, feel free to show your thanks in increasi
 
 1. Star this repo (click that star icon at the top right)
 2. Say thanks (tweet at [@ezekeal](http://twitter.com/ezekeal) and say thanks)
-3. Attribution, mention "Zach Koch" on your about page or readme
+3. Attribution: mention "Zach Koch" on your about page or readme
 4. Hire me. (I mean look how cool this is!)
