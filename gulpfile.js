@@ -17,7 +17,7 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('dist/public'))
   gulp.src('src/public/styles/**')
     .pipe(gulp.dest('dist/public/styles'))
-    gulp.src('src/creds.js')
+  gulp.src('src/creds.js')
       .pipe(gulp.dest('dist'))
 })
 
