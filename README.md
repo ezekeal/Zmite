@@ -23,3 +23,10 @@ module.exports = {
 * install packages locally `npm i`
 * run the server `node dist/server`
 * view the endpoints `http://localhost:5000/api/testsession`
+
+### Showing Thanks
+If this information helped you at all, feel free to show your thanks in increasing levels of gratitude.
+1. Star this repo (click that star icon at the top righ)
+2. Say thanks (tweet at [@ezekeal](http://twitter.com/ezekeal) and say thanks)
+3. Attribution, mention "Zach Koch" on your about page or readme
+4. Hire me. (I mean look how cool this is!)
