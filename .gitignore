@@ -3,3 +3,4 @@ node_modules
 dist
 elm-stuff
 creds.js
+.DS_Store
