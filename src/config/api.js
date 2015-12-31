@@ -55,15 +55,14 @@ function getRequestURL (method, cb) {
 }
 
 function getSessionId (cb) {
-  var cutoff = moment.utc().subtract(15, 'minutes').toDate()
-  console.log('cutoff is: ', cutoff)
+  var cutoff = moment.utc().subtract(14, 'minutes').toDate()
   Session.findOne({timestamp: {$gt: cutoff}}, function (err, result) {
     if (err) { cb(err) }
 
     if (result) {
       var recordTime = new Date(result.timestamp)
       console.log('pulling from record')
-      console.log('timestamp is', moment(recordTime).toDate())
+      console.log('time created: ', moment(recordTime).fromNow())
       cb(null, result.session_id)
     } else {
       var timestamp = getTimestamp()
@@ -77,8 +76,10 @@ function getSessionId (cb) {
         Session.create({
           'ret_msg': json.ret_msg,
           'session_id': json.session_id,
-          'timestamp': moment(json.timestamp, RES_TIMESTAMP_FORMAT).toDate()
+          'timestamp': moment.utc(json.timestamp, RES_TIMESTAMP_FORMAT).toDate()
         }, function (err, session) {
+          console.log('timestamp was ' + json.timestamp)
+          console.log('saved timestamp is ' + session.timestamp)
           cb(err, session.session_id)
         })
       })
