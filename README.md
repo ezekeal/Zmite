@@ -19,8 +19,8 @@ module.exports = {
 * [install Node](https://nodejs.org/en/)
 * install elm globally `npm i -g elm`
 * install gulp globally `npm i -g gulp`
-* build with gulp `gulp build`
 * install packages locally `npm i`
+* build with gulp `gulp build`
 * run the server `node dist/server`
 * view the endpoints `http://localhost:5000/api/testsession`
 
