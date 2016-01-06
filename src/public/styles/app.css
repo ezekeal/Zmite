@@ -1,5 +1,54 @@
-.items {
+@import url(https://fonts.googleapis.com/css?family=Roboto|Caesar+Dressing|Uncial+Antiqua);
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #EEEEEE;
+}
+
+.page-header {
+  font-family: 'Caesar Dressing', sans-serif;
   width: 100vw;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  padding: 0.5em 1.5em;
+  background-color: #17171C;
+  color: #DFAE10;
+}
+
+.page-footer {}
+
+.items-view {
+  width: 100vw;
+  padding: 0.5em;
+}
+
+.item-list {
   display: flex;
   flex-wrap: wrap;
+  margin: 1em 0.5em 2em 0.5em;
+}
+
+.item-section-heading {
+  font-family: 'Caesar Dressing';
+  font-size: 1.8em;
+  margin: 0.5em;
+}
+
+.item-sheet {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5em;
+  padding: 0.5em;
+  width: 16em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.item-sheet p, .item-sheet ul {
+  margin-top: 0.7em;
+}
+
+.item-sheet .title {
+  font-size: 1.2em;
+  margin-bottom: 0.75em;
 }

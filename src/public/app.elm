@@ -11,6 +11,7 @@ import StartApp as StartApp
 
 import SmiteApi exposing (getItems)
 import SmiteItems exposing (Item)
+import ItemView
 
 
 -- MODEL
@@ -50,29 +51,19 @@ port tasks =
 
 view address model =
     div
-      [ id "container" ]
+      [ appStyle, id "container" ]
       [ pageHeader
-      , itemView model.items
+      , ItemView.view model.items
       , pageFooter
       ]
 
 pageHeader : Html
 pageHeader =
-  h1 [ ] [ text "Zmite" ]
+  h1 [ class "page-header" ] [ text "Zmite" ]
 
 pageFooter : Html
 pageFooter =
-  p [ ] [ text "github.com/ezekeal"]
-
-itemView items =
-  let
-    itemIcons = List.map itemIcon items
-  in
-    ul [ class "items" ] itemIcons
-
-itemIcon item =
-  li [ ]
-    [ img [ src item.itemIconUrl ] [ ] ]
+  p [ class "page-footer" ] [ text "github.com/ezekeal"]
 
 app =
   StartApp.start
@@ -84,3 +75,9 @@ app =
 
 main =
   app.html
+
+-- Style
+
+appStyle =
+  style
+    [ ]
