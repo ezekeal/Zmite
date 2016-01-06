@@ -15,6 +15,7 @@ var router = express.Router()
 
 router.get('/', function (req, res) {
   res.end('This is the API!')
+  console.log('/api hit')
 })
 
 router.post('/', function (req, res) {
@@ -24,8 +25,10 @@ router.post('/', function (req, res) {
       if (err) { res.end('Error: ' + err) }
 
       req.body.params.map(function (param) {
-        url += ('/' + param)
+        url += `/${param}`
       })
+
+      console.log('url: ' + url)
 
       fetch(url)
       .then(function (response) {
@@ -73,11 +76,6 @@ function getRequestURL (method, cb) {
     var signature = getSignature(method, timestamp)
 
     var url = `${SMITE_URL}/${method}Json/${DEV_ID}/${signature}/${sessionID}/${timestamp}`
-    switch (method) {
-      case 'getgods':
-        url += 'LANGUAGE_CODE'
-        break
-    }
 
     cb(err, url)
   })

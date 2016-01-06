@@ -6,7 +6,7 @@ var plugins = gulpLoadPlugins()
 gulp.task('elm-init', plugins.elm.init)
 
 gulp.task('elm', ['elm-init'], function () {
-  return gulp.src('src/public/*.elm')
+  return gulp.src('src/public/app.elm')
     .pipe(plugins.plumber())
     .pipe(plugins.elm())
     .pipe(gulp.dest('dist/public/'))
