@@ -3,6 +3,7 @@ const creds = require('../creds')
 const moment = require('moment')
 const md5 = require('md5')
 const Session = require('../schemas/Session')
+const Cache = require('../schemas/Cache')
 const fetch = require('node-fetch')
 
 const DEV_ID = creds.devId
@@ -20,8 +21,9 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
   if (req.body && req.body.method) {
-    console.log('method is: ', req.body.method)
-    getRequestURL(req.body.method, function (err, url) {
+    var method = req.body.method
+    console.log('method is: ', method)
+    getRequestURL(method, function (err, url) {
       if (err) { res.end('Error: ' + err) }
 
       req.body.params.map(function (param) {
@@ -30,10 +32,8 @@ router.post('/', function (req, res) {
 
       console.log('url: ' + url)
 
-      fetch(url)
-      .then(function (response) {
-        return response.json()
-      }).then(function (json) {
+      getCache(method, url, function (err, json) {
+        if (err) { res.err }
         res.json(json)
       })
     })
@@ -88,8 +88,8 @@ function getSessionId (cb) {
 
     if (result) {
       var recordTime = new Date(result.timestamp)
-      console.log('pulling from record')
-      console.log('time created: ', moment(recordTime).fromNow())
+      //console.log('pulling from record')
+      //console.log('time created: ', moment(recordTime).fromNow())
       cb(null, result.session_id)
     } else {
       var timestamp = getTimestamp()
@@ -109,6 +109,66 @@ function getSessionId (cb) {
         })
       })
     }
+  })
+}
+
+function getCache (method, url, cb) {
+  switch (method) {
+
+    case 'getitems':
+      var cutoff = moment.utc().subtract(1, 'day').toDate()
+      Cache.findOne({method: method}, function (err, result) {
+        if (err) { cb(err) }
+
+        if (result) {
+          var expired = moment(result.timestamp).isBefore(cutoff)
+          if (result.data && !expired) {
+            var recordTime = new Date(result.timestamp)
+            console.log('pulling from cache for: ' + method)
+            console.log('time created: ', moment(recordTime).fromNow())
+            cb(null, result.data)
+          } else {
+            console.log('cache expired; updating')
+            fetchJson(url, function (json) {
+              result.data = json
+              result.timestamp = moment.utc().format(RES_TIMESTAMP_FORMAT).toDate()
+              result.save()
+              cb(null, result.data)
+            })
+          }
+        } else {
+          fetchJson(url, function (json) {
+            console.log('creating cache')
+            var timestamp = moment.utc().toDate()
+            Cache.create({
+              'method': method,
+              'data': json,
+              'timestamp': timestamp
+            }, function (err, cache) {
+              cb(err, cache.data)
+            })
+          })
+        }
+      })
+      break
+
+    default:
+      fetch(url)
+      .then(function (response) {
+        return response.json()
+      }).then(function (json) {
+        cb(null, json)
+      })
+      break
+  }
+}
+
+function fetchJson (url, cb) {
+  fetch(url)
+  .then(function (res) {
+    return res.json()
+  }).then(function (json) {
+    cb(json)
   })
 }
 

@@ -2,6 +2,8 @@
 
 ## A site using the Smite API by Hi-Rez Studios
 
+A working version can be found [here](www.ezekeal.com)
+
 This source is avaliable for helping others and getting help from others.
 
 To get started you will need to:
