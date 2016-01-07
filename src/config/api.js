@@ -87,9 +87,6 @@ function getSessionId (cb) {
     if (err) { cb(err) }
 
     if (result) {
-      var recordTime = new Date(result.timestamp)
-      //console.log('pulling from record')
-      //console.log('time created: ', moment(recordTime).fromNow())
       cb(null, result.session_id)
     } else {
       var timestamp = getTimestamp()
