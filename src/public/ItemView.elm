@@ -34,7 +34,9 @@ iconView address items selectedItemId itemList =
   in
     div [ class "icon-view"]
       [ div [ ] [ itemGroup iconList ]
-      , div [ ] (List.map (infoSheet items) selectedItems)
+      , div [ class "item-sheet-gutter" ]
+        [ div [ ] (List.map (infoSheet items) selectedItems)
+        ]
       ]
 
 infoView items itemList =

@@ -3,15 +3,16 @@
 body {
   width: 100vw;
   font-family: 'Roboto', sans-serif;
-  background-color: #EEEEEE;
+  background-color: black;
 }
 
 .page-header {
+  display: flex;
+  justify-content: center;
   font-family: 'Caesar Dressing', sans-serif;
-  font-size: 2.5em;
-  margin-bottom: 0.5em;
-  padding: 0.5em 1.5em;
-  background-color: #17171C;
+  font-size: 2.8em;
+  padding-top: 0.5em;
+  background-color: black;
   color: #DFAE10;
 }
 
@@ -34,7 +35,8 @@ body {
 }
 
 .item-sheet {
-  background-color: white;
+  background-color: #1F1F1F;
+  color: #BBB;
   display: flex;
   flex-direction: column;
   margin: 0.5em;
@@ -43,17 +45,24 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
+.item-sheet-gutter {
+  min-width: 20em;
+  background-color: black;
+}
+
+.item-sheet-gutter .item-sheet {
+  position: fixed;
+  right: 1em
+}
+
 .item-sheet .title {
   font-size: 1.2em;
   margin-bottom: 0.75em;
 }
 
+.item-sheet .stats,
+.item-sheet .price,
 .item-sheet .short-description {
-  color: #555555;
-  margin-bottom: 0.5em;
-}
-
-.item-sheet .stats, .item-sheet .price {
   margin: 0.75em;
 }
 
@@ -63,6 +72,7 @@ body {
 
 .filter {
   margin-bottom: 1em;
+  color: white
 }
 
 .filter span {
