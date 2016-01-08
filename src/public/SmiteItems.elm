@@ -1,6 +1,7 @@
 module SmiteItems where
 
-import Json.Decode as Json exposing ((:=))
+import Json.Decode as Json exposing ((:=), succeed, list, string, int, bool, Decoder)
+import Json.Decode.Extra exposing ((|:))
 
 
 -- Params
@@ -39,36 +40,33 @@ type alias MenuItem = {
 
 -- JSON Decoders
 
-decode : Json.Decoder (List Item)
+decode : Decoder (List Item)
 decode =
-  Json.list <|
-    Json.object1 Item ("ChildItemId" := Json.int)
-      `apply` ("DeviceName" := Json.string)
-      `apply` ("IconId" := Json.int)
-      `apply` ("ItemDescription" := decodeItemDescription)
-      `apply` ("ItemId" := Json.int)
-      `apply` ("ItemTier" := Json.int)
-      `apply` ("Price" := Json.int)
-      `apply` ("RootItemId" := Json.int)
-      `apply` ("ShortDesc" := Json.string)
-      `apply` ("StartingItem" := Json.bool)
-      `apply` ("Type" := Json.string)
-      `apply` ("itemIcon_URL" := Json.string)
+  list <|
+    succeed Item
+      |: ("ChildItemId" := int)
+      |: ("DeviceName" := string)
+      |: ("IconId" := int)
+      |: ("ItemDescription" := decodeItemDescription)
+      |: ("ItemId" := int)
+      |: ("ItemTier" := int)
+      |: ("Price" := int)
+      |: ("RootItemId" := int)
+      |: ("ShortDesc" := string)
+      |: ("StartingItem" := bool)
+      |: ("Type" := string)
+      |: ("itemIcon_URL" := string)
 
 
-decodeItemDescription : Json.Decoder ItemDescription
+decodeItemDescription : Decoder ItemDescription
 decodeItemDescription =
-  Json.object1 ItemDescription ("Description" := Json.string)
-    `apply` ("Menuitems" := Json.list decodeMenuItem)
-    `apply` ("SecondaryDescription" := Json.string)
+  succeed ItemDescription
+    |: ("Description" := string)
+    |: ("Menuitems" := list decodeMenuItem)
+    |: ("SecondaryDescription" := string)
 
-decodeMenuItem : Json.Decoder MenuItem
+decodeMenuItem : Decoder MenuItem
 decodeMenuItem =
-  Json.object1 MenuItem ("Description" := Json.string)
-    `apply` ("Value" := Json.string)
-
---Utilities
-
-apply : Json.Decoder (a -> b) -> Json.Decoder a -> Json.Decoder b
-apply func value =
-    Json.object2 (<|) func value
+  succeed MenuItem
+    |: ("Description" := string)
+    |: ("Value" := string)

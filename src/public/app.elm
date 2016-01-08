@@ -18,11 +18,21 @@ import ItemView
 
 type alias Model =
     { items : List Item
+    , itemFilter :
+        { display: String
+        , sortBy: ( String, String )
+        , category: String
+        }
     }
 
 initialModel : Model
 initialModel =
   { items = [ ]
+  , itemFilter =
+      { display = "icons"
+      , sortBy = ("price", "ascending")
+      , category = "all"
+      }
   }
 
 
@@ -38,7 +48,7 @@ update action model =
       ( model, Effects.none )
 
     UpdateItems maybeItemList ->
-      ( Model (Maybe.withDefault model.items maybeItemList)
+      ( { model | items = (Maybe.withDefault model.items maybeItemList) }
       , Effects.none
       )
 
@@ -59,7 +69,9 @@ view address model =
 
 pageHeader : Html
 pageHeader =
-  h1 [ class "page-header" ] [ text "Zmite" ]
+  div [ class "page-header" ]
+    [ h1 [ ] [ text "Zmite" ]
+    ]
 
 pageFooter : Html
 pageFooter =

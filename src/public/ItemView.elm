@@ -10,7 +10,8 @@ view items =
       List.map (infoSheet items) itemList
   in
     div [ class "items-view" ]
-      [ itemGroup "Items" (infoSheets (List.filter isPassive tier3))
+      [ itemSelector
+      , itemGroup "Items" (infoSheets (List.filter isPassive tier3))
       , itemGroup "Actives" (infoSheets (List.filter isActive tier3))
       ]
 
@@ -30,11 +31,12 @@ itemGroup title itemList =
 infoSheet items item =
   div [ class "item-sheet" ]
     [ h4 [ class "title"] [ text item.deviceName ]
+    , p [ class "short-description" ] [ text item.shortDesc ]
     , icon item
-    , ul [ ] (stats item)
-    , p [ ] [ text ("Price: " ++ toString (getFullPrice items item)) ]
-    , p [ ] [ text item.itemDescription.description ]
-    , p [ ] [ text item.itemDescription.secondaryDescription ]
+    , ul [ class "stats" ] (stats item)
+    , p [ class "price" ] [ text ("Price: " ++ toString (getFullPrice items item)) ]
+    , p [ class "description" ] [ text item.itemDescription.description ]
+    , p [ class "description" ] [ text item.itemDescription.secondaryDescription ]
     ]
 
 stats item =
@@ -43,6 +45,13 @@ stats item =
       li [ ] [ text (i.description ++ " " ++ i.value)]
   in
     List.map stat item.itemDescription.menuItems
+
+itemSelector =
+  div [ class "filter" ]
+    [ span [ ] [ text "Filter:" ]
+    , i [ class "fa fa-picture-o" ] [ ]
+    , i [ class "fa fa-info" ] [ ]
+    ]
 
 -- Data
 

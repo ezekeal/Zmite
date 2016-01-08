@@ -1,13 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto|Caesar+Dressing|Uncial+Antiqua);
 
 body {
+  width: 100vw;
   font-family: 'Roboto', sans-serif;
   background-color: #EEEEEE;
 }
 
 .page-header {
   font-family: 'Caesar Dressing', sans-serif;
-  width: 100vw;
   font-size: 2.5em;
   margin-bottom: 0.5em;
   padding: 0.5em 1.5em;
@@ -18,7 +18,7 @@ body {
 .page-footer {}
 
 .items-view {
-  width: 100vw;
+
   padding: 0.5em;
 }
 
@@ -39,16 +39,29 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0.5em;
-  padding: 0.5em;
-  width: 16em;
+  padding: 0.8em;
+  width: 19em;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
-
-.item-sheet p, .item-sheet ul {
-  margin-top: 0.7em;
 }
 
 .item-sheet .title {
   font-size: 1.2em;
   margin-bottom: 0.75em;
+}
+
+.item-sheet .short-description {
+  color: #555555;
+  margin-bottom: 0.5em;
+}
+
+.item-sheet .stats, .item-sheet .price {
+  margin: 0.75em;
+}
+
+.item-sheet .description {
+  margin-top: 1em;
+}
+
+.filter span, .filter i {
+  margin-right: 0.5em
 }
