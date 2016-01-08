@@ -18,14 +18,13 @@ body {
 .page-footer {}
 
 .items-view {
-
   padding: 0.5em;
 }
 
 .item-list {
   display: flex;
   flex-wrap: wrap;
-  margin: 1em 0.5em 2em 0.5em;
+  margin: 0em 0.5em 2em 0.5em;
 }
 
 .item-section-heading {
@@ -62,6 +61,22 @@ body {
   margin-top: 1em;
 }
 
-.filter span, .filter i {
-  margin-right: 0.5em
+.filter {
+  margin-bottom: 1em;
+}
+
+.filter span {
+  margin-left: 0.75em;
+}
+
+.filter .selector {
+  cursor: pointer;
+}
+
+.filter .selected {
+  color: orange;
+}
+
+.icon-view {
+  display: flex;
 }

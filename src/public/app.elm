@@ -8,9 +8,10 @@ import Signal exposing (Address)
 import Effects exposing (Effects, Never)
 import Task exposing (Task)
 import StartApp as StartApp
+import Action exposing (..)
 
 import SmiteApi exposing (getItems)
-import SmiteItems exposing (Item)
+import SmiteItems exposing (Item, ItemFilter)
 import ItemView
 
 
@@ -18,11 +19,8 @@ import ItemView
 
 type alias Model =
     { items : List Item
-    , itemFilter :
-        { display: String
-        , sortBy: ( String, String )
-        , category: String
-        }
+    , itemFilter : ItemFilter
+    , selectedItemId : Int
     }
 
 initialModel : Model
@@ -30,17 +28,15 @@ initialModel =
   { items = [ ]
   , itemFilter =
       { display = "icons"
-      , sortBy = ("price", "ascending")
+      , sorting = ("price", "ascending")
       , category = "all"
       }
+  , selectedItemId = -1
   }
 
 
 -- UPDATE
 
-type Action
-  = NoOp
-  | UpdateItems (Maybe (List Item))
 
 update action model =
   case action of
@@ -48,9 +44,29 @@ update action model =
       ( model, Effects.none )
 
     UpdateItems maybeItemList ->
-      ( { model | items = (Maybe.withDefault model.items maybeItemList) }
+      ( { model |
+          items = (Maybe.withDefault model.items maybeItemList) }
       , Effects.none
       )
+
+    FilterItems itemFilter ->
+      ( { model |
+          itemFilter = itemFilter }
+      , Effects.none
+      )
+
+    SelectItem itemId ->
+      let
+        newId =
+          if model.selectedItemId == itemId then
+            -1
+          else
+            itemId
+      in
+        ( { model |
+            selectedItemId = newId }
+        , Effects.none
+        )
 
 port tasks : Signal (Task.Task Never ())
 port tasks =
@@ -63,7 +79,7 @@ view address model =
     div
       [ appStyle, id "container" ]
       [ pageHeader
-      , ItemView.view model.items
+      , ItemView.view address model
       , pageFooter
       ]
 

@@ -128,7 +128,7 @@ function getCache (method, url, cb) {
             console.log('cache expired; updating')
             fetchJson(url, function (json) {
               result.data = json
-              result.timestamp = moment.utc().format(RES_TIMESTAMP_FORMAT).toDate()
+              result.timestamp = moment.utc().toDate()
               result.save()
               cb(null, result.data)
             })

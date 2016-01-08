@@ -37,6 +37,12 @@ type alias MenuItem = {
   value       : String
 }
 
+type alias ItemFilter =
+  { display: String
+  , sorting: ( String, String )
+  , category: String
+  }
+
 
 -- JSON Decoders
 
