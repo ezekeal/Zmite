@@ -2,27 +2,30 @@ module ItemView where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, targetValue, on)
 import Effects exposing (Effects)
 import Task
 import Action exposing (..)
 import Maybe.Extra exposing (isNothing)
-import SmiteItems exposing (ItemFilter)
+import SmiteItems as Item
+import String exposing (startsWith, endsWith, dropLeft, toInt)
+import Char exposing (isDigit)
+import Graphics.Element exposing (show)
 
 view address model =
   let
-    tier3 =
-      List.filter isTier3 model.items
+    sortItems items =
+      getSorted items model.itemSorting model.itemSortType
     viewType =
-      case model.itemFilter.display of
+      case model.itemDisplay of
         "info" ->
           infoView model.items
         _ ->
           iconView address model.items model.selectedItemId
   in
     div [ class "items-view" ]
-      [ itemSelector address model.itemFilter
-      , viewType (List.filter isPassive tier3)
+      [ itemSelector address model
+      , viewType (sortItems model.items)
       ]
 
 iconView address items selectedItemId itemList =
@@ -78,26 +81,90 @@ stats item =
   in
     List.map stat item.itemDescription.menuItems
 
-itemSelector : Signal.Address Action -> ItemFilter -> Html
-itemSelector address itemFilter =
+
+itemSelector address model =
   div [ class "filter"]
     [ span [ ] [ text "Display:" ]
     , span
-        [ class (isSelected itemFilter "icons")
-        , onClick address (FilterItems { itemFilter | display = "icons"})
+        [ class (isSelected model.itemDisplay "icons")
+        , onClick address (DisplayItems "icons")
         ]
         [ text "icons" ]
     , span
-        [ class (isSelected itemFilter "info")
-        , onClick address (FilterItems { itemFilter | display = "info"})
+        [ class (isSelected model.itemDisplay "info")
+        , onClick address (DisplayItems "info")
         ]
         [ text "info" ]
+    , span [ ] [ text "Sort:" ]
+    , select [ onChange address SetSortType ]
+        (listToOptions Item.types)
+    , div [ class "sort-arrows" ]
+      [ i
+          [ class ((isSelected model.itemSorting "descending") ++ " fa fa-caret-down")
+          , onClick address (SortItems "descending")
+          ] [ ]
+      , i
+        [ class ((isSelected model.itemSorting "ascending") ++ " fa fa-caret-up")
+        , onClick address (SortItems "ascending")
+        ] [ ]
+      ]
     ]
+
 
 -- Utils
 
-isSelected itemFilter filterName =
-  if itemFilter.display == filterName then
+getSorted items direction itemType =
+  let
+    filtered =
+      if itemType == "Price" then
+        items
+      else
+        hasStat items itemType
+    sorted =
+      List.sortBy (getStat items itemType) filtered
+  in
+    if direction == "ascending" then
+      sorted
+    else
+      List.reverse sorted
+
+getStat items stat item =
+  let
+    attrs =
+      item.itemDescription.menuItems
+    getVal attr =
+      if attr.description == stat then
+        statToInt attr.value
+      else
+        0
+  in
+    if stat == "Price" then
+      getFullPrice items item
+    else
+      List.sum (List.map getVal attrs)
+
+statToInt str =
+  str
+  |> String.filter (\c -> isDigit c || c == '-' )
+  |> toInt
+  |> Result.withDefault 0
+
+hasStat items stat =
+  List.filter (\item -> (getStat items stat item) > 0 ) items
+
+
+listToOptions list =
+  let textToOpt optText =
+    option [ ] [ text optText ]
+  in
+    List.map textToOpt list
+
+onChange : Signal.Address a -> (String -> a) -> Attribute
+onChange address msg =
+    on "change" targetValue (\str -> Signal.message address (msg str))
+
+isSelected field filterName =
+  if field == filterName then
     "selector selected"
   else
     "selector"
@@ -107,7 +174,10 @@ getFullPrice items item =
     getRelated a =
       item.childItemId == a.itemId || item.rootItemId == a.itemId
     sumPrices prices =
-      item.price + List.sum prices
+      if item.itemId == item.rootItemId then
+        item.price
+      else
+        item.price + List.sum prices
   in
     List.filter getRelated items
       |> List.map (\i -> i.price)

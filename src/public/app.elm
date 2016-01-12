@@ -11,7 +11,7 @@ import StartApp as StartApp
 import Action exposing (..)
 
 import SmiteApi exposing (getItems)
-import SmiteItems exposing (Item, ItemFilter)
+import SmiteItems exposing (Item)
 import ItemView
 
 
@@ -19,18 +19,20 @@ import ItemView
 
 type alias Model =
     { items : List Item
-    , itemFilter : ItemFilter
+    , itemDisplay : String
+    , itemSorting : String
+    , itemSortType : String
+    , itemFilters : List String
     , selectedItemId : Int
     }
 
 initialModel : Model
 initialModel =
   { items = [ ]
-  , itemFilter =
-      { display = "icons"
-      , sorting = ("price", "ascending")
-      , category = "all"
-      }
+  , itemDisplay = "icons"
+  , itemSorting = "descending"
+  , itemSortType = "Price"
+  , itemFilters = [ ]
   , selectedItemId = -1
   }
 
@@ -49,9 +51,9 @@ update action model =
       , Effects.none
       )
 
-    FilterItems itemFilter ->
+    DisplayItems display ->
       ( { model |
-          itemFilter = itemFilter }
+          itemDisplay = display }
       , Effects.none
       )
 
@@ -67,6 +69,31 @@ update action model =
             selectedItemId = newId }
         , Effects.none
         )
+
+    SortItems sorting ->
+      ( { model |
+          itemSorting = sorting }
+      , Effects.none
+      )
+
+    SetSortType sortType ->
+      ( { model |
+          itemSortType = sortType }
+      , Effects.none
+      )
+
+    AddItemFilter filterName ->
+      ( { model |
+          itemFilters = filterName :: model.itemFilters }
+      , Effects.none
+      )
+
+    RemoveItemFilter filterName ->
+      ( { model |
+          itemFilters = List.filter (\n -> n /= filterName) model.itemFilters }
+      , Effects.none
+      )
+
 
 port tasks : Signal (Task.Task Never ())
 port tasks =

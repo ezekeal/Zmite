@@ -37,11 +37,29 @@ type alias MenuItem = {
   value       : String
 }
 
-type alias ItemFilter =
-  { display: String
-  , sorting: ( String, String )
-  , category: String
-  }
+
+-- Enums
+
+types =
+  [ "Price"
+  , "Health"
+  , "Mana"
+  , "Physical Protection"
+  , "Magical Protection"
+  , "Physical Power"
+  , "Magical Power"
+  , "Physical Penetration"
+  , "Magical Penetration"
+  , "Physical Lifesteal"
+  , "Magical Lifesteal"
+  , "HP5"
+  , "MP5"
+  , "Attack Speed"
+  , "Critical Strike Chance"
+  , "Cooldown Reduction"
+  , "Crowd Control Reduction"
+  , "Movement Speed"
+  ]
 
 
 -- JSON Decoders

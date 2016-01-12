@@ -5,5 +5,9 @@ import SmiteItems exposing (Item, ItemFilter)
 type Action
   = NoOp
   | UpdateItems (Maybe (List Item))
-  | FilterItems ItemFilter
+  | DisplayItems String
   | SelectItem Int
+  | SortItems String
+  | SetSortType String
+  | AddItemFilter String
+  | RemoveItemFilter String
