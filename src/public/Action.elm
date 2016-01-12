@@ -1,6 +1,6 @@
 module Action where
 
-import SmiteItems exposing (Item, ItemFilter)
+import SmiteItems exposing (Item)
 
 type Action
   = NoOp
