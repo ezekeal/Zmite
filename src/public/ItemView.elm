@@ -17,7 +17,7 @@ view address model =
     filterItems =
       getFiltered model.items model.itemFilters
     sortItems items =
-      getSorted items model.itemSorting model.itemSortType
+      getSorted model.items items model.itemSorting model.itemSortType
     viewType =
       case model.itemDisplay of
         "info" ->
@@ -161,7 +161,7 @@ applyFilter items filterName =
     List.filter itemFilter items
 
 
-getSorted items direction itemType =
+getSorted fullList items direction itemType =
   let
     filtered =
       if itemType == "Price" then
@@ -169,14 +169,14 @@ getSorted items direction itemType =
       else
         hasStat items itemType
     sorted =
-      List.sortBy (getStat items itemType) filtered
+      List.sortBy (getStat fullList items itemType) filtered
   in
     if direction == "ascending" then
       sorted
     else
       List.reverse sorted
 
-getStat items stat item =
+getStat fullList items stat item =
   let
     attrs =
       item.itemDescription.menuItems
@@ -187,7 +187,7 @@ getStat items stat item =
         0
   in
     if stat == "Price" then
-      getFullPrice items item
+      getFullPrice fullList item
     else
       List.sum (List.map getVal attrs)
 
@@ -198,7 +198,7 @@ statToInt str =
   |> Result.withDefault 0
 
 hasStat items stat =
-  List.filter (\item -> (getStat items stat item) > 0 ) items
+  List.filter (\item -> (getStat items items stat item) > 0 ) items
 
 
 listToOptions list =
