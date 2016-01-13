@@ -89,7 +89,7 @@ itemSelector address model =
     displayList =
       ["icons", "info"]
     filterList =
-      ["Tier 1", "Tier 2", "Tier 3", "Active", "Passive"]
+      ["Tier 1", "Tier 2", "Tier 3", "Passive", "Active", "Consumable"]
     displayClass =
       isSelected model.itemDisplay
     filterClass =
@@ -153,6 +153,8 @@ applyFilter items filterName =
         filterActive
       "Passive" ->
         filterPassive
+      "Consumable" ->
+        filterConsumable
       default ->
         noFilter
   in
@@ -246,6 +248,9 @@ filterActive item =
 
 filterPassive item =
   item.itemType /= "Item"
+
+filterConsumable item =
+  item.itemType /= "Consumable"
 
 noFilter item =
   True

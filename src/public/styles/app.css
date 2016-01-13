@@ -16,7 +16,9 @@ body {
   color: #DFAE10;
 }
 
-.page-footer {}
+.page-footer {
+  color: orange;
+}
 
 .items-view {
   padding: 0.5em;
@@ -61,9 +63,12 @@ body {
 }
 
 .item-sheet .stats,
-.item-sheet .price,
-.item-sheet .short-description {
+.item-sheet .price {
   margin: 0.75em;
+}
+
+.item-sheet .short-description {
+  margin-bottom: 0.75em;
 }
 
 .item-sheet .description {
@@ -79,6 +84,7 @@ body {
 
 .filter-segment {
   margin-right: 1em;
+  font-size: 1.2em;
 }
 
 .filter-segment-title {
@@ -107,12 +113,21 @@ body {
   display: flex;
 }
 
-.filter .selector {
+.filter span.selector {
+  padding: 0.3em;
   cursor: pointer;
   margin-right: 0.5em;
+  border-radius: 0.2em;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.filter .selected {
+.filter span.selected {
+  background-color: orange;
+  color: black;
+}
+
+.filter i.selected {
   color: orange;
 }
 
