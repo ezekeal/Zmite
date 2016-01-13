@@ -77,17 +77,21 @@ body {
   color: white
 }
 
+.filter-segment {
+  margin-right: 1em;
+}
+
+.filter-segment-title {
+  font-size: 1.2em;
+  margin-bottom: 0.4em;
+}
+
 .sort-arrows i {
   font-size: 1.5em;
   margin-left: 0.5em;
 }
 
-.filter span {
-  margin-left: 0.75em;
-}
-
 .filter select {
-  margin-left: 0.5em;
   background-color: black;
   color: orange;
   border: none;
@@ -95,8 +99,17 @@ body {
   font-size: 1em;
 }
 
+.filter-select-container {
+  border-bottom: 1px solid orange;
+}
+
+.filter-select {
+  display: flex;
+}
+
 .filter .selector {
   cursor: pointer;
+  margin-right: 0.5em;
 }
 
 .filter .selected {

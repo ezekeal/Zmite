@@ -32,13 +32,12 @@ initialModel =
   , itemDisplay = "icons"
   , itemSorting = "descending"
   , itemSortType = "Price"
-  , itemFilters = [ ]
+  , itemFilters = [ "Tier 1", "Tier 2", "Active" ]
   , selectedItemId = -1
   }
 
 
 -- UPDATE
-
 
 update action model =
   case action of
@@ -82,18 +81,17 @@ update action model =
       , Effects.none
       )
 
-    AddItemFilter filterName ->
-      ( { model |
-          itemFilters = filterName :: model.itemFilters }
-      , Effects.none
-      )
-
-    RemoveItemFilter filterName ->
-      ( { model |
-          itemFilters = List.filter (\n -> n /= filterName) model.itemFilters }
-      , Effects.none
-      )
-
+    ToggleItemFilter filterName ->
+      let newFilters =
+        if List.member filterName model.itemFilters then
+          (List.filter (\item -> item /= filterName) model.itemFilters)
+        else
+          filterName :: model.itemFilters
+      in
+        ( { model |
+            itemFilters = newFilters }
+        , Effects.none
+        )
 
 port tasks : Signal (Task.Task Never ())
 port tasks =

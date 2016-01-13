@@ -9,5 +9,4 @@ type Action
   | SelectItem Int
   | SortItems String
   | SetSortType String
-  | AddItemFilter String
-  | RemoveItemFilter String
+  | ToggleItemFilter String

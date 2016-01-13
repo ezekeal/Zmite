@@ -14,6 +14,8 @@ import Graphics.Element exposing (show)
 
 view address model =
   let
+    filterItems =
+      getFiltered model.items model.itemFilters
     sortItems items =
       getSorted items model.itemSorting model.itemSortType
     viewType =
@@ -25,7 +27,7 @@ view address model =
   in
     div [ class "items-view" ]
       [ itemSelector address model
-      , viewType (sortItems model.items)
+      , viewType (sortItems filterItems)
       ]
 
 iconView address items selectedItemId itemList =
@@ -83,35 +85,79 @@ stats item =
 
 
 itemSelector address model =
-  div [ class "filter"]
-    [ span [ ] [ text "Display:" ]
-    , span
-        [ class (isSelected model.itemDisplay "icons")
-        , onClick address (DisplayItems "icons")
+  let
+    displayList =
+      ["icons", "info"]
+    filterList =
+      ["Tier 1", "Tier 2", "Tier 3", "Active", "Passive"]
+    displayClass =
+      isSelected model.itemDisplay
+    filterClass =
+      isFiltered model.itemFilters
+  in
+    div [ class "filter"]
+      [ filterSegment address "View:" DisplayItems displayClass displayList
+      , filterSegment address "Show:" ToggleItemFilter filterClass filterList
+      , div [ class "filter-segment" ]
+        [ h5 [ class "filter-segment-title" ] [ text "Sort:" ]
+        , div [ class "filter-select" ]
+          [ div [ class "filter-select-container" ]
+              [ select [ onChange address SetSortType ]
+                  (listToOptions Item.types)
+              ]
+          , div [ class "sort-arrows" ]
+              [ i
+                  [ class ((isSelected model.itemSorting "descending") ++ " fa fa-caret-down")
+                  , onClick address (SortItems "descending")
+                  ] [ ]
+              , i
+                  [ class ((isSelected model.itemSorting "ascending") ++ " fa fa-caret-up")
+                  , onClick address (SortItems "ascending")
+                  ] [ ]
+              ]
+          ]
         ]
-        [ text "icons" ]
-    , span
-        [ class (isSelected model.itemDisplay "info")
-        , onClick address (DisplayItems "info")
-        ]
-        [ text "info" ]
-    , span [ ] [ text "Sort:" ]
-    , select [ onChange address SetSortType ]
-        (listToOptions Item.types)
-    , div [ class "sort-arrows" ]
-      [ i
-          [ class ((isSelected model.itemSorting "descending") ++ " fa fa-caret-down")
-          , onClick address (SortItems "descending")
-          ] [ ]
-      , i
-        [ class ((isSelected model.itemSorting "ascending") ++ " fa fa-caret-up")
-        , onClick address (SortItems "ascending")
-        ] [ ]
       ]
+
+filterSegment address title action classFunc list =
+  let clickable str =
+    span
+        [ class (classFunc str)
+        , onClick address (action str)
+        ]
+        [ text str ]
+  in
+    div [ class "filter-segment" ]
+    [ h5 [ class "filter-segment-title"] [ text title ]
+    , div [ ] (List.map clickable list)
     ]
 
 
 -- Utils
+getFiltered items filterNames =
+  if List.isEmpty filterNames then
+    items
+  else
+    List.foldl (\name list -> (applyFilter list) name) items filterNames
+
+applyFilter items filterName =
+  let itemFilter =
+    case filterName of
+      "Tier 1" ->
+        filterTier 1
+      "Tier 2" ->
+        filterTier 2
+      "Tier 3" ->
+        filterTier 3
+      "Active" ->
+        filterActive
+      "Passive" ->
+        filterPassive
+      default ->
+        noFilter
+  in
+    List.filter itemFilter items
+
 
 getSorted items direction itemType =
   let
@@ -163,6 +209,12 @@ onChange : Signal.Address a -> (String -> a) -> Attribute
 onChange address msg =
     on "change" targetValue (\str -> Signal.message address (msg str))
 
+isFiltered filterList filterName =
+  if List.member filterName filterList then
+    "selector"
+  else
+    "selector selected"
+
 isSelected field filterName =
   if field == filterName then
     "selector selected"
@@ -186,14 +238,17 @@ getFullPrice items item =
 
 -- Filters
 
-isTier3 item =
-  item.itemTier == 3
+filterTier number item =
+  item.itemTier /= number
 
-isActive item =
-  item.itemType == "Active"
+filterActive item =
+  item.itemType /= "Active"
 
-isPassive item =
-  item.itemType == "Item"
+filterPassive item =
+  item.itemType /= "Item"
+
+noFilter item =
+  True
 
 hasId itemId item =
   item.itemId == itemId
