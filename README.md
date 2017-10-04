@@ -1,5 +1,7 @@
 # Zmite
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ezekeal/Zmite.svg)](https://greenkeeper.io/)
+
 ## A site using the Smite API by Hi-Rez Studios
 
 A working version can be found [here](www.ezekeal.com)
